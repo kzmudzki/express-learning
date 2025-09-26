@@ -1,0 +1,89 @@
+<h2>System Health Check</h2>
+
+<h3>Basic Health</h3>
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Status</th>
+        <td style="color: green;"><strong>
+                <%= health.data.status %>
+            </strong></td>
+    </tr>
+    <tr>
+        <th>Message</th>
+        <td>
+            <%= health.message %>
+        </td>
+    </tr>
+    <tr>
+        <th>Timestamp</th>
+        <td>
+            <%= new Date(health.timestamp).toLocaleString() %>
+        </td>
+    </tr>
+</table>
+
+<h3>Detailed System Information</h3>
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Field</th>
+        <th>Value</th>
+    </tr>
+    <tr>
+        <td><strong>Environment</strong></td>
+        <td>
+            <%= detailed.data.environment %>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Node Version</strong></td>
+        <td>
+            <%= detailed.data.nodeVersion %>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Platform</strong></td>
+        <td>
+            <%= detailed.data.platform %>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Process ID</strong></td>
+        <td>
+            <%= detailed.data.pid %>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Uptime</strong></td>
+        <td>
+            <%= Math.floor(detailed.data.uptime) %> seconds
+        </td>
+    </tr>
+</table>
+
+<h3>Memory Usage</h3>
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Type</th>
+        <th>Usage (MB)</th>
+    </tr>
+    <tr>
+        <td>RSS (Resident Set Size)</td>
+        <td>
+            <%= Math.round(detailed.data.memory.rss / 1024 / 1024) %> MB
+        </td>
+    </tr>
+    <tr>
+        <td>Heap Total</td>
+        <td>
+            <%= Math.round(detailed.data.memory.heapTotal / 1024 / 1024) %> MB
+        </td>
+    </tr>
+    <tr>
+        <td>Heap Used</td>
+        <td>
+            <%= Math.round(detailed.data.memory.heapUsed / 1024 / 1024) %> MB
+        </td>
+    </tr>
+</table>
+
+<p><a href="/web">← Back to Home</a></p>

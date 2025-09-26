@@ -1,0 +1,57 @@
+<h2>All Users</h2>
+
+<p>Total users: <%= users.length %>
+</p>
+
+<% if (users.length===0) { %>
+    <p><strong>No users found.</strong></p>
+    <p><a href="/web/users/seed">Click here to add sample users</a></p>
+    <% } else { %>
+        <table border="1" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(user=> { %>
+                    <tr>
+                        <td>
+                            <%= user.id %>
+                        </td>
+                        <td>
+                            <%= user.name %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td>
+                            <%= new Date(user.createdAt).toLocaleDateString() %>
+                        </td>
+                        <td>
+                            <a href="/web/users/<%= user.id %>">View Details</a>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+        <% } %>
+
+            <hr>
+
+            <h3>Add New User</h3>
+            <form action="/web/users/create" method="POST">
+                <p>
+                    <label>Name: <input type="text" name="name" required></label>
+                </p>
+                <p>
+                    <label>Email: <input type="email" name="email" required></label>
+                </p>
+                <p>
+                    <button type="submit">Create User</button>
+                </p>
+            </form>

@@ -1,0 +1,64 @@
+<h2>User Details</h2>
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Field</th>
+        <th>Value</th>
+    </tr>
+    <tr>
+        <td><strong>ID</strong></td>
+        <td>
+            <%= user.id %>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Name</strong></td>
+        <td>
+            <%= user.name %>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Email</strong></td>
+        <td>
+            <%= user.email %>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Created At</strong></td>
+        <td>
+            <%= new Date(user.createdAt).toLocaleString() %>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Updated At</strong></td>
+        <td>
+            <%= new Date(user.updatedAt).toLocaleString() %>
+        </td>
+    </tr>
+</table>
+
+<h3>Actions</h3>
+<p>
+    <a href="/web/users">← Back to All Users</a>
+</p>
+
+<h4>Edit User</h4>
+<form action="/web/users/<%= user.id %>/update" method="POST">
+    <p>
+        <label>Name: <input type="text" name="name" value="<%= user.name %>" required></label>
+    </p>
+    <p>
+        <label>Email: <input type="email" name="email" value="<%= user.email %>" required></label>
+    </p>
+    <p>
+        <button type="submit">Update User</button>
+    </p>
+</form>
+
+<h4>Delete User</h4>
+<form action="/web/users/<%= user.id %>/delete" method="POST"
+    onsubmit="return confirm('Are you sure you want to delete this user?')">
+    <p>
+        <button type="submit" style="background-color: red; color: white;">Delete User</button>
+    </p>
+</form>
