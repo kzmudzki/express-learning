@@ -3,3 +3,12 @@ node_modules
 .env
 
 /src/generated/prisma
+
+# Test files
+coverage/
+*.test.db
+test.db
+
+# Log files
+logs/
+*.log

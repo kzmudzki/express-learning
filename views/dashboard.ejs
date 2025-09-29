@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - <%= title %>
+    </title>
+</head>
+
+<body>
+    <header>
+        <h1>🚀 Express API Dashboard</h1>
+        <div>
+            Welcome: <span id="user-name">Loading...</span>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="/web">Home</a> |
+        <a href="/web/users">Users</a> |
+        <a href="/web/auth">Auth</a> |
+        <span>Dashboard</span>
+    </nav>
+
+    <hr>
+
+    <main>
+        <section>
+            <h2>Welcome to your Dashboard!</h2>
+            <p>You're successfully authenticated and have access to the API.</p>
+
+            <div id="user-details">
+                <!-- User details will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <hr>
+
+        <section>
+            <h3>Quick Actions</h3>
+
+            <p><strong>👥 Manage Users</strong><br>
+                View, create, and manage users through the web interface<br>
+                <a href="/web/users">View Users</a>
+            </p>
+
+            <p><strong>📖 API Documentation</strong><br>
+                Explore the interactive API documentation with Swagger UI<br>
+                <a href="/api-docs">Open API Docs</a>
+            </p>
+
+            <p><strong>🔍 Health Check</strong><br>
+                Monitor system health and performance metrics<br>
+                <a href="/web/health">Check Health</a>
+            </p>
+
+            <p><strong>⚡ API Test</strong><br>
+                Test protected API endpoints with your current token<br>
+                <button onclick="testAPI()">Test API Access</button>
+            </p>
+        </section>
+
+        <hr>
+
+        <section>
+            <h3>Your Access Token</h3>
+            <p>Use this token to access protected API endpoints:</p>
+
+            <div style="background: #f5f5f5; padding: 10px; border: 1px solid #ddd; font-family: monospace; word-break: break-all;"
+                id="token-display">
+                Loading token...
+            </div>
+            <br>
+            <button id="copy-btn" onclick="copyToken()">Copy Token</button>
+
+            <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border: 1px solid #2196f3;">
+                <strong>Usage Example:</strong><br>
+                <code>curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:3000/api/v1/users</code>
+            </div>
+        </section>
+    </main>
+
+    <hr>
+    <footer>
+        <p>Express.js API Dashboard - Authenticated User Panel</p>
+    </footer>
+
+    <script src="/dashboard.js"></script>
+</body>
+
+</html>

@@ -25,6 +25,20 @@ router.get('/', (_req: Request, res: Response) => {
 	});
 });
 
+// Authentication page
+router.get('/auth', (_req: Request, res: Response) => {
+	res.render('auth', {
+		title: 'Express.js API',
+	});
+});
+
+// Dashboard page
+router.get('/dashboard', (_req: Request, res: Response) => {
+	res.render('dashboard', {
+		title: 'Express.js API',
+	});
+});
+
 // Users list page
 router.get('/users', async (_req: Request, res: Response, next: NextFunction) => {
 	try {

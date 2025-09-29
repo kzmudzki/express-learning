@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { ApiResponse } from '../types';
 import { AppError } from '../middleware/errorHandler';
 import { userService } from '../services/userService';
+import { invalidateCache } from '../middleware/performance';
 import { Prisma } from '@prisma/client';
 
 export const userController = {
@@ -59,6 +60,9 @@ export const userController = {
 
 			const newUser = await userService.createUser({ name, email });
 
+			// Invalidate users cache after creating new user
+			invalidateCache('users*');
+
 			const response: ApiResponse = {
 				success: true,
 				message: 'User created successfully',
@@ -100,6 +104,9 @@ export const userController = {
 				return next(new AppError('User not found', 404));
 			}
 
+			// Invalidate users cache after updating user
+			invalidateCache('users*');
+
 			const response: ApiResponse = {
 				success: true,
 				message: 'User updated successfully',
@@ -131,6 +138,9 @@ export const userController = {
 			if (!deletedUser) {
 				return next(new AppError('User not found', 404));
 			}
+
+			// Invalidate users cache after deleting user
+			invalidateCache('users*');
 
 			const response: ApiResponse = {
 				success: true,
