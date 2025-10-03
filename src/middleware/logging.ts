@@ -1,7 +1,7 @@
 import morgan from 'morgan';
 import { Express, Request, Response } from 'express';
 import { isDevelopment } from '../config';
-import { logger, logHttp, logError } from '../lib/logger';
+import { logHttp, logError } from '../lib/logger';
 
 // Custom morgan stream to use our winston logger
 const stream = {
@@ -20,7 +20,7 @@ export const setupLogging = (app: Express): void => {
 	app.use(
 		morgan(customFormat, {
 			stream,
-			skip: (req: Request, res: Response) => {
+			skip: (req: Request, _res: Response) => {
 				// Skip logging for health checks in production
 				return !isDevelopment && req.path.includes('/health');
 			},

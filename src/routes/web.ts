@@ -4,19 +4,19 @@ import { AppError } from '../middleware/errorHandler';
 
 const router = Router();
 
-// Helper function to render with layout
-const renderWithLayout = (res: Response, template: string, data: any) => {
-	const content =
-		res.app.get('view engine') === 'ejs'
-			? res.render(template, data, (err, html) => {
-					if (err) throw err;
-					return html;
-			  })
-			: '';
-
-	// For now, render directly without layout
-	res.render(template, data);
-};
+// Helper functions are commented out as they're not currently used
+// const renderWithLayout = (res: Response, template: string, data: any) => {
+// 	const content =
+//		res.app.get('view engine') === 'ejs'
+//			? res.render(template, data, (err, html) => {
+//					if (err) throw err;
+//					return html;
+//			  })
+//			: '';
+//
+//	// For now, render directly without layout
+//	res.render(template, data);
+// };
 
 // Home page
 router.get('/', (_req: Request, res: Response) => {

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { authService } from '../services/authService';
 import { AppError } from './errorHandler';
-import { JwtPayload, AuthenticatedUser } from '../types/auth';
+import { AuthenticatedUser } from '../types/auth';
 
 // Import UserRole from the generated Prisma client
 import { UserRole } from '@prisma/client';
@@ -15,7 +15,7 @@ declare global {
 	}
 }
 
-export const authenticateToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const authenticateToken = async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
 	try {
 		const authHeader = req.headers.authorization;
 		const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
@@ -44,7 +44,7 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
 	}
 };
 
-export const optionalAuth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const optionalAuth = async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
 	try {
 		const authHeader = req.headers.authorization;
 		const token = authHeader && authHeader.split(' ')[1];
@@ -64,7 +64,7 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
 };
 
 export const requireRole = (...roles: (UserRole | string)[]) => {
-	return (req: Request, res: Response, next: NextFunction): void => {
+	return (req: Request, _res: Response, next: NextFunction): void => {
 		if (!req.user) {
 			return next(new AppError('Authentication required', 401));
 		}
@@ -78,16 +78,16 @@ export const requireRole = (...roles: (UserRole | string)[]) => {
 };
 
 // Helper functions that avoid module-level enum access
-export const requireAdmin = (req: Request, res: Response, next: NextFunction): void => {
-	return requireRole('ADMIN' as any)(req, res, next);
+export const requireAdmin = (req: Request, _res: Response, next: NextFunction): void => {
+	return requireRole('ADMIN' as any)(req, _res, next);
 };
 
-export const requireAdminOrModerator = (req: Request, res: Response, next: NextFunction): void => {
-	return requireRole('ADMIN' as any, 'MODERATOR' as any)(req, res, next);
+export const requireAdminOrModerator = (req: Request, _res: Response, next: NextFunction): void => {
+	return requireRole('ADMIN' as any, 'MODERATOR' as any)(req, _res, next);
 };
 
 export const requireOwnershipOrAdmin = (getUserId: (req: Request) => number) => {
-	return (req: Request, res: Response, next: NextFunction): void => {
+	return (req: Request, _res: Response, next: NextFunction): void => {
 		if (!req.user) {
 			return next(new AppError('Authentication required', 401));
 		}

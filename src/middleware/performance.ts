@@ -18,7 +18,9 @@ class SimpleCache {
 		// Remove oldest entries if cache is full
 		if (this.cache.size >= this.maxSize) {
 			const oldestKey = this.cache.keys().next().value;
-			this.cache.delete(oldestKey);
+			if (oldestKey) {
+				this.cache.delete(oldestKey);
+			}
 		}
 
 		this.cache.set(key, {
@@ -86,7 +88,8 @@ export const cacheMiddleware = (ttlSeconds: number = 300, keyGenerator?: (req: R
 			if (!res.headersSent) {
 				res.setHeader('X-Cache', 'HIT');
 			}
-			return res.json(cachedData);
+			res.json(cachedData);
+			return;
 		}
 
 		// Intercept res.json to cache the response
@@ -136,7 +139,7 @@ export const performanceMonitoring = (req: Request, res: Response, next: NextFun
 			});
 		}
 
-		return originalEnd.apply(this, args);
+		return originalEnd.apply(this, args as any);
 	};
 
 	next();
@@ -202,7 +205,7 @@ export const setupPerformance = (app: Application): void => {
 	app.use(etagMiddleware);
 
 	// Cache control headers for static content
-	app.use('/api-docs', (req: Request, res: Response, next: NextFunction) => {
+	app.use('/api-docs', (_req: Request, res: Response, next: NextFunction) => {
 		res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour
 		next();
 	});
