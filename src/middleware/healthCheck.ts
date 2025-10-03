@@ -27,10 +27,8 @@ interface HealthStatus {
 	};
 }
 
-export const detailedHealthCheck = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const detailedHealthCheck = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
 	try {
-		const startTime = Date.now();
-
 		// Check database connection
 		let dbStatus: 'connected' | 'disconnected' = 'disconnected';
 		let dbResponseTime: number | undefined;
@@ -97,7 +95,7 @@ export const detailedHealthCheck = async (req: Request, res: Response, next: Nex
 	}
 };
 
-export const readinessCheck = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const readinessCheck = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
 	try {
 		// Check if the application is ready to serve traffic
 		let isReady = true;
@@ -134,7 +132,7 @@ export const readinessCheck = async (req: Request, res: Response, next: NextFunc
 	}
 };
 
-export const livenessCheck = (req: Request, res: Response): void => {
+export const livenessCheck = (_req: Request, res: Response): void => {
 	// Simple liveness check - if this endpoint responds, the service is alive
 	const response: ApiResponse = {
 		success: true,

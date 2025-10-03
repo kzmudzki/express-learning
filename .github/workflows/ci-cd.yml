@@ -1,0 +1,126 @@
+name: CI/CD Pipeline
+
+# When this workflow runs
+on:
+  # Run on every push to main branch
+  push:
+    branches: [main]
+  # Run on every pull request to main branch
+  pull_request:
+    branches: [main]
+  # Allow manual triggering from GitHub UI
+  workflow_dispatch:
+
+# Define the jobs that will run
+jobs:
+  # Job 1: Run tests and build the application
+  test-and-build:
+    name: Test and Build
+    runs-on: ubuntu-latest # Use Ubuntu as the operating system
+
+    steps:
+      # Step 1: Get the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Use Node.js version 18
+          cache: 'npm' # Cache npm dependencies for faster builds
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci # Use 'ci' for faster, reliable installs in CI
+
+      # Step 4: Set up database for testing
+      - name: Set up test database
+        run: |
+          # Create a test database and run migrations
+          npx prisma migrate deploy --schema prisma/schema.prisma
+          npm run db:seed
+        env:
+          DATABASE_URL: file:./test.db
+
+      # Step 5: Run TypeScript compilation check
+      - name: Type check
+        run: npm run build
+
+      # Step 6: Run all tests
+      - name: Run tests
+        run: npm run test:coverage
+
+      # Step 7: Upload test coverage results (optional)
+      - name: Upload coverage to GitHub
+        uses: actions/upload-artifact@v4
+        if: always() # Run even if tests fail
+        with:
+          name: coverage-report
+          path: coverage/
+
+      # Step 8: Save build artifacts for potential deployment
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  # Job 2: Security and code quality checks
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Check for known security vulnerabilities
+      - name: Security audit
+        run: npm audit --audit-level high
+
+    # Optional: Add linting if you want to add ESLint later
+    # - name: Lint code
+    #   run: npm run lint
+
+  # Job 3: Deployment simulation (runs only on main branch)
+  deploy-simulation:
+    name: Deploy Simulation
+    runs-on: ubuntu-latest
+    # Only run if the previous jobs succeed AND we're on main branch
+    needs: [test-and-build, code-quality]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Download the built application from the previous job
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      # Simulate deployment steps
+      - name: Simulate deployment
+        run: |
+          echo "🚀 Deployment simulation started..."
+          echo "📁 Build artifacts ready:"
+          ls -la dist/
+          echo "✅ Application would be deployed to production"
+          echo "🌐 In a real scenario, this would:"
+          echo "   - Deploy to a server (AWS, Heroku, DigitalOcean, etc.)"
+          echo "   - Update database migrations: npm run db:deploy"
+          echo "   - Start the application: npm start"
+          echo "   - Run health checks"
+          echo "🎉 Deployment simulation completed!"
